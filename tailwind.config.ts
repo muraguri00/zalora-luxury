@@ -16,6 +16,8 @@ export default {
       fontFamily: {
         display: ['Cormorant Garamond', 'serif'],
         body: ['Outfit', 'sans-serif'],
+        serif: ['Playfair Display', 'serif'],
+        sans: ['Montserrat', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -73,6 +75,12 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        'gold-sm': '0 0 20px hsl(43 72% 52% / 0.2)',
+        'gold': '0 0 30px hsl(43 72% 52% / 0.3)',
+        'gold-lg': '0 0 50px hsl(43 72% 52% / 0.2)',
+        'gold-xl': '0 0 60px hsl(43 72% 52% / 0.3)',
       },
       keyframes: {
         "accordion-down": {

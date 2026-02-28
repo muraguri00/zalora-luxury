@@ -4,6 +4,7 @@ import product3 from "@/assets/product-3.jpg";
 import product4 from "@/assets/product-4.jpg";
 import product5 from "@/assets/product-5.jpg";
 import product6 from "@/assets/product-6.jpg";
+import { csvProducts, csvCategories, csvBrands } from "./csvProducts";
 
 export interface Product {
   id: string;
@@ -14,9 +15,13 @@ export interface Product {
   category: string;
   image: string;
   description: string;
+  originalPrice?: number;
+  discount?: number;
+  rating?: number;
+  ratingCount?: number;
 }
 
-export const products: Product[] = [
+export const featuredProducts: Product[] = [
   {
     id: "ZLR-001",
     name: "Noir Structured Tote",
@@ -26,6 +31,8 @@ export const products: Product[] = [
     category: "Bags",
     image: product1,
     description: "Hand-stitched Italian leather tote with gold hardware.",
+    rating: 4.8,
+    ratingCount: 142,
   },
   {
     id: "ZLR-002",
@@ -36,6 +43,8 @@ export const products: Product[] = [
     category: "Watches",
     image: product2,
     description: "18k gold-plated automatic movement wristwatch.",
+    rating: 4.9,
+    ratingCount: 87,
   },
   {
     id: "ZLR-003",
@@ -46,6 +55,8 @@ export const products: Product[] = [
     category: "Accessories",
     image: product3,
     description: "Pure mulberry silk scarf with artisan print.",
+    rating: 4.7,
+    ratingCount: 203,
   },
   {
     id: "ZLR-004",
@@ -56,6 +67,8 @@ export const products: Product[] = [
     category: "Shoes",
     image: product4,
     description: "Patent leather stiletto with signature red sole.",
+    rating: 4.6,
+    ratingCount: 96,
   },
   {
     id: "ZLR-005",
@@ -66,6 +79,8 @@ export const products: Product[] = [
     category: "Accessories",
     image: product5,
     description: "Full-grain leather belt with brushed gold buckle.",
+    rating: 4.5,
+    ratingCount: 178,
   },
   {
     id: "ZLR-006",
@@ -76,8 +91,17 @@ export const products: Product[] = [
     category: "Fragrance",
     image: product6,
     description: "Eau de parfum with notes of amber, oud, and rose.",
+    rating: 4.8,
+    ratingCount: 315,
   },
 ];
 
-export const categories = ["All", "Bags", "Watches", "Accessories", "Shoes", "Fragrance"];
-export const brands = ["All", "Maison Zalora", "Zalora Horlogerie", "Zalora Atelier", "Zalora Parfums"];
+export const products: Product[] = [...featuredProducts, ...csvProducts];
+
+const luxuryCategories = ["Bags", "Watches", "Accessories", "Shoes", "Fragrance"];
+const allCategories = [...new Set([...luxuryCategories, ...csvCategories.filter(c => c !== "All")])];
+export const categories = ["All", ...allCategories];
+
+const luxuryBrands = ["Maison Zalora", "Zalora Horlogerie", "Zalora Atelier", "Zalora Parfums"];
+const allBrands = [...new Set([...luxuryBrands, ...csvBrands.filter(b => b !== "All")])];
+export const brands = ["All", ...allBrands];
