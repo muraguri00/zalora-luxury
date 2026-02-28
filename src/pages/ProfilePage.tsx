@@ -1,57 +1,112 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { User, Package, Heart, CreditCard, Store } from "lucide-react";
+import { User, Mail, ShoppingBag, Crown, Sparkles } from "lucide-react";
 
 const ProfilePage = () => {
   return (
     <div className="min-h-screen bg-background">
-      <div className="bg-cream px-6 py-16 text-center">
-        <div className="mx-auto flex h-20 w-20 items-center justify-center bg-primary">
-          <User className="h-8 w-8 text-primary-foreground" />
+      {/* Title section */}
+      <div className="bg-secondary px-6 py-16 text-center">
+        <div className="flex items-center justify-center gap-3">
+          <div className="h-px w-12 bg-accent" />
+          <User className="h-6 w-6 text-accent" strokeWidth={1.5} />
+          <div className="h-px w-12 bg-accent" />
         </div>
-        <h1 className="mt-6 font-display text-3xl font-light text-foreground">
-          Alexandra Smith
-        </h1>
-        <p className="mt-1 font-body text-sm text-muted-foreground">
-          alexandra@email.com · Member since 2025
+        <h2 className="mt-4 font-display text-4xl font-light text-foreground">Your Profile</h2>
+        <p className="mt-2 font-sans text-xs tracking-luxury text-muted-foreground">
+          EXCLUSIVE MEMBER AREA
         </p>
       </div>
 
-      <div className="mx-auto max-w-4xl px-6 py-12">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {[
-            { icon: Package, label: "My Orders", desc: "Track your purchases", to: "#" },
-            { icon: Heart, label: "Wishlist", desc: "Your saved items", to: "#" },
-            { icon: CreditCard, label: "Payment", desc: "Manage payment methods", to: "#" },
-            { icon: User, label: "Account", desc: "Edit personal details", to: "#" },
-          ].map((item) => (
-            <Link
-              key={item.label}
-              to={item.to}
-              className="group flex items-center gap-4 border border-border p-6 transition-all hover:border-accent hover:luxury-shadow"
-            >
-              <item.icon className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-accent" />
-              <div>
-                <h3 className="font-body text-sm font-medium text-foreground">{item.label}</h3>
-                <p className="font-body text-xs text-muted-foreground">{item.desc}</p>
+      <div className="mx-auto max-w-5xl px-6 py-12 space-y-10">
+        {/* Account Info Card */}
+        <div className="relative border-2 border-accent/30 bg-card p-12 shadow-gold-lg overflow-hidden">
+          {/* Corner decorations */}
+          <div className="absolute top-0 left-0 h-32 w-32 bg-gradient-to-br from-accent/5 to-transparent" />
+          <div className="absolute bottom-0 right-0 h-32 w-32 bg-gradient-to-tl from-accent/5 to-transparent" />
+
+          <div className="relative">
+            <div className="mb-8 flex items-center gap-3 border-b-2 border-accent/20 pb-4">
+              <div className="h-px w-12 bg-accent" />
+              <h3 className="font-display text-2xl font-light text-foreground">Account Information</h3>
+            </div>
+
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <User className="h-5 w-5 text-accent" strokeWidth={1.5} />
+                <div>
+                  <p className="font-sans text-xs tracking-wide text-muted-foreground">FULL NAME</p>
+                  <p className="font-sans text-sm text-foreground">Alexandra Smith</p>
+                </div>
               </div>
-            </Link>
-          ))}
+              <div className="flex items-center gap-4">
+                <Mail className="h-5 w-5 text-accent" strokeWidth={1.5} />
+                <div>
+                  <p className="font-sans text-xs tracking-wide text-muted-foreground">EMAIL</p>
+                  <p className="font-sans text-sm text-foreground">alexandra@email.com</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Become a dropshipper */}
-        <div className="mt-16 border border-border p-10 text-center">
-          <Store className="mx-auto h-8 w-8 text-accent" />
-          <h2 className="mt-4 font-display text-2xl font-light text-foreground">
-            Become a Zalora Partner
-          </h2>
-          <p className="mx-auto mt-2 max-w-md font-body text-sm text-muted-foreground">
-            Apply to open your own store and earn 20% commission on every sale. 
-            Start your luxury dropshipping business today.
-          </p>
-          <Button variant="gold" size="lg" className="mt-6" asChild>
-            <Link to="/apply">Apply for a Store</Link>
-          </Button>
+        {/* Cart Overview Card */}
+        <div className="relative border-2 border-accent bg-gradient-to-br from-charcoal to-primary p-12 shadow-gold-lg overflow-hidden">
+          {/* Glowing orbs */}
+          <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-accent/5 blur-3xl" />
+          <div className="absolute -bottom-20 -right-20 h-64 w-64 rounded-full bg-accent/5 blur-3xl" />
+
+          <div className="relative flex items-center gap-8">
+            <div className="border border-accent/30 bg-accent/10 p-4">
+              <ShoppingBag className="h-8 w-8 text-accent" strokeWidth={1.5} />
+            </div>
+            <div className="flex-1">
+              <p className="font-sans text-xs tracking-wide text-primary-foreground/60">YOUR BAG</p>
+              <p className="mt-1 font-display text-4xl font-light text-primary-foreground">0 <span className="text-lg">items</span></p>
+            </div>
+            <Button className="border-2 border-accent font-sans text-xs font-semibold tracking-[0.15em] text-primary gold-gradient hover:shadow-gold">
+              VIEW CART
+            </Button>
+          </div>
+        </div>
+
+        {/* Store Application CTA */}
+        <div className="bg-gradient-to-b from-accent/10 to-transparent p-2 md:p-4">
+          <div className="relative border-4 border-accent bg-card p-16 text-center shadow-gold-xl overflow-hidden">
+            <div className="relative">
+              {/* Crown with sparkle */}
+              <div className="relative mx-auto w-fit">
+                <Crown className="h-[72px] w-[72px] text-accent" strokeWidth={1} />
+                <Sparkles className="absolute -right-2 -top-2 h-6 w-6 animate-pulse text-accent" />
+              </div>
+
+              <h2 className="mt-8 font-display text-4xl font-light text-foreground md:text-5xl">
+                Become a Store Owner
+              </h2>
+
+              <div className="mt-4 flex items-center justify-center gap-3">
+                <div className="h-px w-16 bg-accent" />
+                <Sparkles className="h-4 w-4 text-accent" />
+                <div className="h-px w-16 bg-accent" />
+              </div>
+
+              <p className="mx-auto mt-6 max-w-md font-sans text-sm leading-relaxed tracking-wide text-muted-foreground">
+                Apply to open your own store and earn 20% commission on every sale.
+                Start your luxury dropshipping business today.
+              </p>
+
+              <Link
+                to="/apply"
+                className="mt-10 inline-block border-2 border-accent px-16 py-6 font-sans text-xs font-bold tracking-luxury text-primary transition-all duration-500 hover:shadow-gold gold-gradient"
+                style={{
+                  background: "linear-gradient(90deg, hsl(var(--gold-dark)), hsl(var(--gold)), hsl(var(--gold-light)), hsl(var(--gold-dark)))",
+                  backgroundSize: "200% 100%",
+                }}
+              >
+                APPLY FOR A STORE
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </div>

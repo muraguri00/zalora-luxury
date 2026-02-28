@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { CheckCircle, XCircle, Eye, DollarSign, Users, Package, Store, ShieldCheck } from "lucide-react";
+import LuxuryHeader from "@/components/LuxuryHeader";
 
 const AdminDashboardPage = () => {
   const [activeTab, setActiveTab] = useState<"kyc" | "orders" | "stores" | "requests">("kyc");
@@ -14,29 +15,23 @@ const AdminDashboardPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="bg-charcoal px-6 py-10">
-        <div className="mx-auto max-w-7xl">
-          <p className="font-body text-xs uppercase tracking-luxury text-primary-foreground/50">
-            Administration
-          </p>
-          <h1 className="mt-1 font-display text-3xl font-light text-primary-foreground">
-            Admin Dashboard
-          </h1>
-        </div>
-      </div>
+      <LuxuryHeader title="Admin Dashboard" subtitle="ADMINISTRATION" />
 
       <div className="mx-auto max-w-7xl px-6">
         {/* Stats */}
         <div className="-mt-6 grid gap-4 sm:grid-cols-4">
           {[
-            { label: "Pending KYC", value: "3", color: "bg-accent" },
-            { label: "Active Stores", value: "28", color: "bg-primary" },
-            { label: "Open Orders", value: "15", color: "bg-accent" },
-            { label: "Revenue (MTD)", value: "$142K", color: "bg-primary" },
+            { label: "Pending KYC", value: "3", isGold: true },
+            { label: "Active Stores", value: "28", isGold: false },
+            { label: "Open Orders", value: "15", isGold: true },
+            { label: "Revenue (MTD)", value: "$142K", isGold: false },
           ].map((stat) => (
-            <div key={stat.label} className={`${stat.color === "bg-accent" ? "bg-accent" : "bg-primary"} p-6`}>
-              <p className="font-display text-3xl font-light text-primary-foreground">{stat.value}</p>
-              <p className="mt-1 font-body text-xs uppercase tracking-wide text-primary-foreground/70">{stat.label}</p>
+            <div
+              key={stat.label}
+              className={`p-6 ${stat.isGold ? "border border-accent gold-gradient" : "bg-primary"}`}
+            >
+              <p className={`font-display text-3xl font-light ${stat.isGold ? "text-primary" : "text-primary-foreground"}`}>{stat.value}</p>
+              <p className={`mt-1 font-sans text-xs tracking-wide ${stat.isGold ? "text-primary/70" : "text-primary-foreground/70"}`}>{stat.label.toUpperCase()}</p>
             </div>
           ))}
         </div>
@@ -47,14 +42,14 @@ const AdminDashboardPage = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 border-b-2 py-4 font-body text-xs uppercase tracking-luxury transition-colors ${
+              className={`flex items-center gap-2 border-b-2 py-4 font-sans text-xs tracking-luxury transition-colors ${
                 activeTab === tab.id
-                  ? "border-accent text-foreground"
+                  ? "border-accent text-accent"
                   : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
               <tab.icon className="h-4 w-4" />
-              {tab.label}
+              {tab.label.toUpperCase()}
             </button>
           ))}
         </div>
@@ -79,15 +74,15 @@ const AdminKYC = () => (
         { name: "Sarah Kim", email: "sarah.k@email.com", date: "Feb 24, 2026", occupation: "Marketing Manager" },
         { name: "David Okonkwo", email: "david.o@email.com", date: "Feb 23, 2026", occupation: "Entrepreneur" },
       ].map((app) => (
-        <div key={app.email} className="flex items-center justify-between border border-border p-6">
+        <div key={app.email} className="flex items-center justify-between border border-accent/20 p-6 transition-all hover:shadow-gold-sm">
           <div className="flex items-center gap-4">
-            <div className="flex h-10 w-10 items-center justify-center bg-secondary font-body text-sm font-medium text-foreground">
-              {app.name.split(" ").map(n => n[0]).join("")}
+            <div className="flex h-10 w-10 items-center justify-center border border-accent/30 font-sans text-sm font-medium text-accent gold-gradient">
+              <span className="text-primary">{app.name.split(" ").map(n => n[0]).join("")}</span>
             </div>
             <div>
-              <h4 className="font-body text-sm font-medium text-foreground">{app.name}</h4>
-              <p className="font-body text-xs text-muted-foreground">{app.email} · Applied {app.date}</p>
-              <p className="font-body text-xs text-muted-foreground">{app.occupation}</p>
+              <h4 className="font-sans text-sm font-medium text-foreground">{app.name}</h4>
+              <p className="font-sans text-xs text-muted-foreground">{app.email} · Applied {app.date}</p>
+              <p className="font-sans text-xs text-muted-foreground">{app.occupation}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -110,9 +105,9 @@ const AdminOrders = () => (
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="border-b border-border">
+          <tr className="border-b border-accent/20">
             {["Order ID", "Customer", "Product", "Assigned Store", "Status", "Action"].map((h) => (
-              <th key={h} className="pb-3 text-left font-body text-xs uppercase tracking-wide text-muted-foreground">{h}</th>
+              <th key={h} className="pb-3 text-left font-sans text-xs tracking-wide text-accent">{h.toUpperCase()}</th>
             ))}
           </tr>
         </thead>
@@ -123,21 +118,21 @@ const AdminOrders = () => (
             { id: "#ORD-2842", customer: "J. Williams", product: "Essence Nº 7", store: "Luxe Boutique", status: "Pending Payment" },
           ].map((order) => (
             <tr key={order.id} className="border-b border-border/50">
-              <td className="py-4 font-body text-sm text-foreground">{order.id}</td>
-              <td className="py-4 font-body text-sm text-foreground">{order.customer}</td>
-              <td className="py-4 font-body text-sm text-foreground">{order.product}</td>
-              <td className="py-4 font-body text-sm text-foreground">{order.store}</td>
+              <td className="py-4 font-sans text-sm text-foreground">{order.id}</td>
+              <td className="py-4 font-sans text-sm text-foreground">{order.customer}</td>
+              <td className="py-4 font-sans text-sm text-foreground">{order.product}</td>
+              <td className="py-4 font-sans text-sm text-foreground">{order.store}</td>
               <td className="py-4">
-                <span className={`inline-block px-3 py-1 font-body text-xs uppercase tracking-wide ${
-                  order.status === "Unassigned" ? "bg-destructive/10 text-destructive" :
-                  order.status === "Pending Payment" ? "bg-accent/10 text-accent" :
+                <span className={`inline-block px-3 py-1 font-sans text-xs tracking-wide ${
+                  order.status === "Unassigned" ? "border border-destructive/30 bg-destructive/10 text-destructive" :
+                  order.status === "Pending Payment" ? "border border-accent/30 bg-accent/10 text-accent" :
                   "bg-primary/5 text-foreground"
                 }`}>
-                  {order.status}
+                  {order.status.toUpperCase()}
                 </span>
               </td>
               <td className="py-4">
-                <Button variant="outline" size="sm">
+                <Button variant="gold-outline" size="sm">
                   {order.status === "Unassigned" ? "Assign Store" : "View Details"}
                 </Button>
               </td>
@@ -155,9 +150,9 @@ const AdminStores = () => (
     <div className="mt-6 overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="border-b border-border">
+          <tr className="border-b border-accent/20">
             {["Store Name", "Store ID", "Owner", "Products", "Balance", "Orders", "Action"].map((h) => (
-              <th key={h} className="pb-3 text-left font-body text-xs uppercase tracking-wide text-muted-foreground">{h}</th>
+              <th key={h} className="pb-3 text-left font-sans text-xs tracking-wide text-accent">{h.toUpperCase()}</th>
             ))}
           </tr>
         </thead>
@@ -168,16 +163,16 @@ const AdminStores = () => (
             { name: "Prestige House", id: "ZLR-STORE-0029", owner: "Sarah K.", products: 5, balance: "$3,100", orders: 95 },
           ].map((store) => (
             <tr key={store.id} className="border-b border-border/50">
-              <td className="py-4 font-body text-sm font-medium text-foreground">{store.name}</td>
-              <td className="py-4 font-body text-xs text-muted-foreground">{store.id}</td>
-              <td className="py-4 font-body text-sm text-foreground">{store.owner}</td>
-              <td className="py-4 font-body text-sm text-foreground">{store.products}</td>
-              <td className="py-4 font-body text-sm text-accent">{store.balance}</td>
-              <td className="py-4 font-body text-sm text-foreground">{store.orders}</td>
+              <td className="py-4 font-sans text-sm font-medium text-foreground">{store.name}</td>
+              <td className="py-4 font-sans text-xs text-muted-foreground">{store.id}</td>
+              <td className="py-4 font-sans text-sm text-foreground">{store.owner}</td>
+              <td className="py-4 font-sans text-sm text-foreground">{store.products}</td>
+              <td className="py-4 font-sans text-sm text-accent">{store.balance}</td>
+              <td className="py-4 font-sans text-sm text-foreground">{store.orders}</td>
               <td className="py-4">
                 <div className="flex gap-2">
                   <Button variant="ghost" size="sm">View</Button>
-                  <Button variant="outline" size="sm"><DollarSign className="mr-1 h-3 w-3" /> Adjust Credits</Button>
+                  <Button variant="gold-outline" size="sm"><DollarSign className="mr-1 h-3 w-3" /> Adjust Credits</Button>
                 </div>
               </td>
             </tr>
@@ -198,21 +193,21 @@ const AdminRequests = () => (
         { type: "Product Removal", store: "Prestige House", detail: "Remove: Heritage Belt (ZLR-005)", time: "1 day ago" },
         { type: "Store Closure", store: "Vintage Luxe", detail: "Reason: Personal circumstances", time: "2 days ago" },
       ].map((req, i) => (
-        <div key={i} className="flex items-center justify-between border border-border p-6">
+        <div key={i} className="flex items-center justify-between border border-accent/20 p-6 transition-all hover:shadow-gold-sm">
           <div>
             <div className="flex items-center gap-3">
-              <span className={`inline-block px-3 py-1 font-body text-xs uppercase tracking-wide ${
-                req.type.includes("Recharge") ? "bg-accent/10 text-accent" :
+              <span className={`inline-block px-3 py-1 font-sans text-xs tracking-wide ${
+                req.type.includes("Recharge") ? "border border-accent/30 bg-accent/10 text-accent" :
                 req.type.includes("Withdrawal") ? "bg-primary/5 text-foreground" :
                 req.type.includes("Removal") ? "bg-secondary text-muted-foreground" :
-                "bg-destructive/10 text-destructive"
+                "border border-destructive/30 bg-destructive/10 text-destructive"
               }`}>
-                {req.type}
+                {req.type.toUpperCase()}
               </span>
-              <span className="font-body text-sm font-medium text-foreground">{req.store}</span>
+              <span className="font-sans text-sm font-medium text-foreground">{req.store}</span>
             </div>
-            <p className="mt-1 font-body text-xs text-muted-foreground">{req.detail}</p>
-            <p className="mt-0.5 font-body text-xs text-muted-foreground/60">{req.time}</p>
+            <p className="mt-1 font-sans text-xs text-muted-foreground">{req.detail}</p>
+            <p className="mt-0.5 font-sans text-xs text-muted-foreground/60">{req.time}</p>
           </div>
           <div className="flex gap-2">
             <Button variant="gold" size="sm"><CheckCircle className="mr-1 h-4 w-4" /> Approve</Button>
