@@ -2,55 +2,54 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
-import { Crown, User, Store, ShieldCheck } from "lucide-react";
-
-const DEMO_ACCOUNTS = [
-  {
-    email: "customer@zalora.com",
-    password: "password123",
-    role: "Customer",
-    icon: User,
-    description: "Browse and shop products",
-    redirectTo: "/catalog",
-  },
-  {
-    email: "store@zalora.com",
-    password: "password123",
-    role: "Store Owner",
-    icon: Store,
-    description: "Manage your store and orders",
-    redirectTo: "/store",
-  },
-  {
-    email: "admin@zalora.com",
-    password: "password123",
-    role: "Admin",
-    icon: ShieldCheck,
-    description: "Access admin dashboard",
-    redirectTo: "/admin",
-  },
-];
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 const AuthPage = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { signIn, signUp } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const account = DEMO_ACCOUNTS.find(acc => acc.email === email && acc.password === password);
-    if (account) {
-      navigate(account.redirectTo);
-    } else {
-      navigate("/catalog");
-    }
-  };
+    setIsLoading(true);
 
-  const handleDemoLogin = (demoEmail: string, demoPassword: string, redirectTo: string) => {
-    setEmail(demoEmail);
-    setPassword(demoPassword);
-    setTimeout(() => navigate(redirectTo), 100);
+    try {
+      if (isSignUp) {
+        const fullNameValue = `${firstName} ${lastName}`.trim();
+        const { error } = await signUp(email, password, fullNameValue);
+
+        if (error) {
+          toast.error(error.message || "Failed to create account");
+        } else {
+          toast.success("Account created successfully! Please sign in.");
+          setIsSignUp(false);
+          setEmail("");
+          setPassword("");
+          setFirstName("");
+          setLastName("");
+        }
+      } else {
+        const { error } = await signIn(email, password);
+
+        if (error) {
+          toast.error(error.message || "Invalid email or password");
+        } else {
+          toast.success("Signed in successfully!");
+          navigate("/catalog");
+        }
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -78,13 +77,25 @@ const AuthPage = () => {
                 <label className="mb-1.5 block font-body text-xs uppercase tracking-wide text-muted-foreground">
                   First Name
                 </label>
-                <Input className="border-border bg-background font-body" placeholder="First name" />
+                <Input
+                  className="border-border bg-background font-body"
+                  placeholder="First name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  required
+                />
               </div>
               <div>
                 <label className="mb-1.5 block font-body text-xs uppercase tracking-wide text-muted-foreground">
                   Last Name
                 </label>
-                <Input className="border-border bg-background font-body" placeholder="Last name" />
+                <Input
+                  className="border-border bg-background font-body"
+                  placeholder="Last name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  required
+                />
               </div>
             </div>
           )}
@@ -98,6 +109,7 @@ const AuthPage = () => {
               placeholder="your@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
           <div>
@@ -110,11 +122,19 @@ const AuthPage = () => {
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
             />
           </div>
 
-          <Button variant="default" size="lg" className="w-full" type="submit">
-            {isSignUp ? "Create Account" : "Sign In"}
+          <Button
+            variant="default"
+            size="lg"
+            className="w-full"
+            type="submit"
+            disabled={isLoading}
+          >
+            {isLoading ? "Please wait..." : isSignUp ? "Create Account" : "Sign In"}
           </Button>
         </form>
 
@@ -123,66 +143,11 @@ const AuthPage = () => {
           <button
             onClick={() => setIsSignUp(!isSignUp)}
             className="text-gold underline-offset-4 hover:underline"
+            type="button"
           >
             {isSignUp ? "Sign In" : "Create Account"}
           </button>
         </p>
-
-        {!isSignUp && (
-          <div className="mt-10 border-t border-accent/20 pt-10">
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-3">
-                <div className="h-px w-8 bg-accent" />
-                <Crown className="h-5 w-5 text-accent" strokeWidth={1.5} />
-                <div className="h-px w-8 bg-accent" />
-              </div>
-              <h3 className="mt-3 font-display text-lg font-light text-foreground">
-                Demo Accounts
-              </h3>
-              <p className="mt-1 font-sans text-xs tracking-wide text-muted-foreground">
-                Click to login and explore different roles
-              </p>
-            </div>
-
-            <div className="mt-6 space-y-3">
-              {DEMO_ACCOUNTS.map((account) => (
-                <button
-                  key={account.email}
-                  onClick={() => handleDemoLogin(account.email, account.password, account.redirectTo)}
-                  className="group w-full border border-accent/20 p-4 text-left transition-all hover:border-accent hover:shadow-gold-sm"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="border border-accent/30 bg-accent/5 p-3 transition-all group-hover:bg-accent/10">
-                      <account.icon className="h-5 w-5 text-accent" strokeWidth={1.5} />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <h4 className="font-sans text-sm font-medium text-foreground">
-                          {account.role}
-                        </h4>
-                        <span className="font-sans text-xs text-muted-foreground">
-                          ({account.email})
-                        </span>
-                      </div>
-                      <p className="mt-0.5 font-sans text-xs text-muted-foreground">
-                        {account.description}
-                      </p>
-                    </div>
-                    <div className="font-sans text-xs tracking-wide text-accent opacity-0 transition-opacity group-hover:opacity-100">
-                      LOGIN →
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            <div className="mt-6 border border-accent/10 bg-accent/5 p-4">
-              <p className="text-center font-sans text-xs leading-relaxed text-muted-foreground">
-                All demo accounts use password: <span className="font-medium text-accent">password123</span>
-              </p>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
